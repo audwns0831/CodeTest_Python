@@ -1,0 +1,38 @@
+
+
+def solution(friends, gifts):
+    
+    len_ = len(friends)
+    #   주고받은 기록변수
+    arr = [[0] * len_ for _ in range(len_)]
+    #   선물지수
+    score = [0] * len_
+    answer = [0] * len_
+    
+    # 주고받은 선물 기록
+    for g in gifts:
+        give, take = g.split()[0], g.split()[1]
+        r = friends.index(give)
+        c = friends.index(take)
+        arr[r][c] += 1
+        
+    for i in range(len_):
+        r_sum = sum(arr[i])
+        c_sum = sum(arr[j][i] for j in range(len_))
+        score[i] = r_sum - c_sum
+    
+    for i in range(len_):
+        for j in range(len_):
+            if i != j:
+                # 두사람이 주고받은 기록이 잇다면 선물을 더 많이 준 사람이 받기
+                if arr[i][j] > arr[j][i]: answer[i] += 1
+                #elif arr[i][j] < arr[j][i]: answer[j] += 1
+                # 주고받은 기록이 없거나 주고받은 수가 같다면
+                elif arr[i][j] == arr[j][i]:
+                    # 선물지수가 더 큰사람이 받기
+                    if score[i] > score[j]: answer[i] += 1
+                    #elif score[i] < score[j]: answer[j] += 1
+                    else: continue
+                else: continue
+    print(answer)
+    return max(answer)
